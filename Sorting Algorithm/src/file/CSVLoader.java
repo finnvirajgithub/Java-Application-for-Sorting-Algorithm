@@ -10,18 +10,13 @@ public class CSVLoader {
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
-
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-
                 try {
                     double value = Double.parseDouble(data[columnIndex]);
                     values.add(value);
-                } catch (NumberFormatException e) {
-                    // Skip non-numeric values (like headers)
-                }
+                } catch (Exception ignored) {}
             }
-
         } catch (IOException e) {
             System.out.println("File reading error!");
         }
@@ -32,5 +27,21 @@ public class CSVLoader {
         }
 
         return array;
+    }
+
+    // ✅ NEW: Load full CSV for JTable
+    public static String[][] loadTableData(String filePath) {
+        List<String[]> rows = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                rows.add(line.split(","));
+            }
+        } catch (IOException e) {
+            System.out.println("Table load error!");
+        }
+
+        return rows.toArray(new String[0][]);
     }
 }
